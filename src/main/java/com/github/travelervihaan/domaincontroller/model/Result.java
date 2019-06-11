@@ -1,4 +1,4 @@
-package com.github.travelervihaan.domaincontroller.model;
+package onet.grupa.domaincontroller.model;
 
 import java.util.List;
 
@@ -11,7 +11,6 @@ import com.google.gson.annotations.Expose;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "domain_name",
-        "domain_type",
         "contact_handle",
         "contact_tech_status",
         "domain_promotion",
@@ -20,6 +19,7 @@ import com.google.gson.annotations.Expose;
         "domain_renew_until_date",
         "domain_status",
         "domain_nameservers",
+        "domain_type",
         "domain_block",
         "domain_active_configuration",
         "domain_configuration_details",
@@ -27,16 +27,14 @@ import com.google.gson.annotations.Expose;
         "domain_dnssec_supported_algorithms",
         "domain_dnssec_supported_digest_types",
         "domain_dnssec_active",
+        "domain_dnssec_data",
+        "domain_child_hosts",
         "domain_autorenew"
 })
 public class Result {
     @Expose
     @JsonProperty("domain_name")
     private String domain_name;
-
-    @Expose
-    @JsonProperty("domain_type")
-    private String domain_type;
 
     @Expose
     @JsonProperty("contact_handle")
@@ -71,6 +69,10 @@ public class Result {
     private List<String> domain_nameservers = null;
 
     @Expose
+    @JsonProperty("domain_type")
+    private String domain_type;
+
+    @Expose
     @JsonProperty("domain_block")
     private Boolean domain_block;
 
@@ -99,9 +101,27 @@ public class Result {
     @JsonProperty("domain_dnssec_active")
     private Boolean domain_dnssec_active;
 
+    @JsonProperty("domain_dnssec_data")
+    @JsonIgnore
+    @Expose(serialize = false, deserialize = false)
+    private List<String> domain_dnssec_data = null;
+
+    @JsonProperty("domain_child_hosts")
+    @JsonIgnore
+    @Expose(serialize = false, deserialize = false)
+    private List<String> domain_child_hosts = null;
+
     @Expose
     @JsonProperty("domain_autorenew")
     private Boolean domain_autorenew;
+
+    public List<String> getDomain_dnssec_data() {
+        return domain_dnssec_data;
+    }
+
+    public void setDomain_dnssec_data(List<String> domain_dnssec_data) {
+        this.domain_dnssec_data = domain_dnssec_data;
+    }
 
     @JsonProperty("domain_name")
     public String getDomain_name() {
