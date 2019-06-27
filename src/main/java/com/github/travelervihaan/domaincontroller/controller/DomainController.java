@@ -1,12 +1,13 @@
-package com.github.travelervihaan.domaincontroller.controller;
+package onet.grupa.domaincontroller.controller;
 
-import com.github.travelervihaan.domaincontroller.service.MongoDomainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import onet.grupa.domaincontroller.service.MongoDomainService;
 
 @Controller
 public class DomainController {
@@ -35,7 +36,7 @@ public class DomainController {
 	}
 	
 	@PostMapping("/addalldomains")
-	public String dropMail() {
+	public String addAllDomains() {
 		mongoDomainService.addAllDomains();
 		return "redirect:/domains";
 	}
@@ -45,7 +46,12 @@ public class DomainController {
 	public String addMail(@RequestParam String domain, Model model) {
 		mongoDomainService.deleteDomain(domain);
 		return "redirect:/domains";
-		
+	}
+
+	@PostMapping("/compare-domains")
+	public String compareDomainsWithFire(){
+		mongoDomainService.checkDomainsFromFile();
+		return "redirect:/domains";
 	}
 
 }
