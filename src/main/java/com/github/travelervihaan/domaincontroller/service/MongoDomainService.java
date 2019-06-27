@@ -136,6 +136,7 @@ public class MongoDomainService {
 		List<Domain> domainsFromDB = domainRepository.findAll();
 		domainsFromDB
 				.stream()
-				.filter(d -> !domainsFromFile.contains(d.getDomainName()));
+				.filter(d -> !domainsFromFile.contains(d.getDomainName()))
+				.forEach(System.out::println);
 	}
 }
