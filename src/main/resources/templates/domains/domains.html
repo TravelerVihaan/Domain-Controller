@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-10">
-					<a th:href="@{/}"><button class="btn btn-dark" type="submit">------ Back</button></a>
+					<a th:href="@{/}"><button class="btn btn-dark btn-sm" type="submit"><------ Back</button></a>
 					<br>
 					<form th:action="@{/add_domain}" method="post">
 						<div class="form-group">
@@ -35,6 +35,11 @@
 						<input type="submit" value="Add all domains"/>
 					</form>
 				</div>
+
+				<br>
+				<form th:action="@{/compare-domains}" method="post">
+					<input type="submit" value="Compare Domains with File"/>
+				</form>
 	
 				<div th:if="not ${domainList.isEmpty()}">
         			<h2>Lista domen:</h2>
