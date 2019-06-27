@@ -1,9 +1,12 @@
-package com.github.travelervihaan.domaincontroller.service;
+package onet.grupa.domaincontroller.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import com.github.travelervihaan.domaincontroller.model.Domain;
-import com.github.travelervihaan.domaincontroller.model.DomainList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoSocketOpenException;
 
-import com.github.travelervihaan.domaincontroller.repository.DomainRepository;
-import com.github.travelervihaan.domaincontroller.scheduler.Tasks;
+import onet.grupa.domaincontroller.model.Domain;
+import onet.grupa.domaincontroller.model.DomainList;
+import onet.grupa.domaincontroller.repository.DomainRepository;
+import onet.grupa.domaincontroller.scheduler.Tasks;
 
 @Service
 public class MongoDomainService {
@@ -82,5 +87,55 @@ public class MongoDomainService {
 		}catch(MongoSocketOpenException e) {
 			log.info("Straciles polaczenie z baza danych!!");
 		}
+	}
+
+	/*
+	* Check domains from file
+	 */
+
+	public void checkDomainsFromFile(){
+		String fileName = "src/main/resources/static/domeny.txt";
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
+		List<String> domainsFromFile = new ArrayList<>();
+
+		try {
+			fileReader = new FileReader(fileName);
+			bufferedReader = new BufferedReader(fileReader);
+			String nextLine = null;
+			while((nextLine = bufferedReader.readLine()) != null){
+				domainsFromFile.add(nextLine);
+			}
+		}catch (IOException e){
+			log.error("IO Exception with read file domeny.txt");
+			e.printStackTrace();
+		}finally{
+			try{
+				if(bufferedReader!=null)
+					bufferedReader.close();
+			}catch (IOException e){
+				log.error("IO Exception with closing buffered reader");
+			}
+		}
+		try {
+			compareDomainsFromFileAndAddNew(domainsFromFile);
+			compareDomainsFromFileAndRemove(domainsFromFile);
+		}catch (MongoSocketOpenException e){
+			log.info("Straciles polaczenie z baza danych!!");
+		}
+	}
+
+	private void compareDomainsFromFileAndAddNew(List<String> domainsFromFile) throws MongoSocketOpenException{
+		domainsFromFile
+				.stream()
+				.filter(d -> !Optional.ofNullable(domainRepository.findByDomainName(d)).isPresent())
+				.forEach(d -> domainRepository.save(new Domain(d)));
+	}
+
+	private void compareDomainsFromFileAndRemove(List<String> domainsFromFile) throws MongoSocketOpenException {
+		List<Domain> domainsFromDB = domainRepository.findAll();
+		domainsFromDB
+				.stream()
+				.filter(d -> !domainsFromFile.contains(d.getDomainName()));
 	}
 }
