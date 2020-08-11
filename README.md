@@ -9,9 +9,9 @@ In answer from API is information about autorenew feature - if it is enabled or 
 If autorenew function is disabled for domain, app sends e-mail message to addresses from list with information which domains needs attention.
 
 ### Used technologies:
-*Java 11<br>
-*Spring Boot<br>
-*Maven<br>
-*Mongo DB<br>
-*Thymeleaf<br>
-*Bootstrap
+* Java 11<br>
+* Spring Boot<br>
+* Maven<br>
+* Mongo DB<br>
+* Thymeleaf<br>
+* Bootstrap
